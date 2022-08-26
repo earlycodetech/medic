@@ -12,7 +12,7 @@ export function StackNavigation () {
         <Stack.Navigator initialRouteName="Intro" >
             <Stack.Screen name="Home" component={Home} />
             <Stack.Screen name="Intro" component={Intro} options={{headerShown:false}} />
-            <Stack.Screen name="Signup" component={Signup} />
+            <Stack.Screen name="Signup" component={Signup} options={{headerShown:false}} />
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="Profile" component={Profile} />
         </Stack.Navigator>

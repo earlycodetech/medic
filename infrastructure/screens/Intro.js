@@ -51,6 +51,7 @@ export function Intro({navigation}){
                     <Button mode='contained' 
                     color={Theme.colors.text.tertiary} 
                     style={{paddingVertical:Theme.sizes[3],marginBottom:Theme.sizes[3]}}
+                    onPress={() => navigation.navigate('Signup')}
                     >Sign up</Button>
 
                     <Button mode='outlined' 
