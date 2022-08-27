@@ -1,5 +1,14 @@
 import { useState, useEffect, useCallback } from 'react';
-import { View, Text, TextInput, StyleSheet, SafeAreaView, ImageBackground } from 'react-native';
+import { 
+    View, 
+    Text, 
+    TextInput, 
+    StyleSheet, 
+    SafeAreaView, 
+    ImageBackground, 
+    TouchableOpacity,
+    FlatList
+} from 'react-native';
 import * as SplashScreen from 'expo-splash-screen';
 import * as Font from 'expo-font';
 import { Questrial_400Regular } from '@expo-google-fonts/questrial';
@@ -7,7 +16,27 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faCross } from '@fortawesome/free-solid-svg-icons';
 import { faBell } from '@fortawesome/free-solid-svg-icons';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faStethoscope } from '@fortawesome/free-solid-svg-icons';
+import { faUserDoctor } from '@fortawesome/free-solid-svg-icons';
+import { faHouseMedical } from '@fortawesome/free-solid-svg-icons';
+import { faTruckMedical } from '@fortawesome/free-solid-svg-icons';
+import { faPerson } from '@fortawesome/free-solid-svg-icons';
+import { faFileLines } from '@fortawesome/free-solid-svg-icons';
+import { faPills } from '@fortawesome/free-solid-svg-icons';
+import { faNewspaper } from '@fortawesome/free-solid-svg-icons';
 import { Theme } from '../components/Theme';
+
+// service component names
+const services = [
+    {id:1,serviceName:'Diagnosis',serviceIcon:faStethoscope},
+    {id:2,serviceName:'Consultation',serviceIcon:faUserDoctor},
+    {id:3,serviceName:'Clinic',serviceIcon:faHouseMedical},
+    {id:4,serviceName:'Ambulance',serviceIcon:faTruckMedical},
+    {id:5,serviceName:'Therapy',serviceIcon:faPerson},
+    {id:6,serviceName:'Prescription',serviceIcon:faFileLines},
+    {id:7,serviceName:'Medicine',serviceIcon:faPills},
+    {id:8,serviceName:'Articles',serviceIcon:faNewspaper},
+];
 
 export function Home({navigation}){
     const [appIsReady, setAppIsReady] = useState(false);
@@ -71,6 +100,25 @@ export function Home({navigation}){
                         <Text style={styles.brandMessageSmall}>for all medical emergencies</Text>
                    </View>
                 </ImageBackground>
+
+                <Text style={styles.servicesheading}>What do you need?</Text>
+                <View style={styles.serviceRow}>
+                    {
+                        Object.values(services).map(item => (
+                            <TouchableOpacity style={styles.service}>
+                                <FontAwesomeIcon 
+                                icon={item.serviceIcon} 
+                                size={38}
+                                style={{marginBottom:6}} 
+                                color='white'
+                                />
+                                <Text style={styles.serviceName}>
+                                    {item.serviceName.length > 9 ? item.serviceName.slice(0,7) + '.' : item.serviceName}
+                                </Text>
+                            </TouchableOpacity>
+                        ))
+                    }
+                </View>
             </View>
         </SafeAreaView>
     );
@@ -111,7 +159,7 @@ const styles = StyleSheet.create({
         paddingLeft:46,
     },
     searchContainer:{
-        marginVertical:Theme.sizes[4]
+        marginVertical:Theme.sizes[2] //new
     },
     searchIcon:{
         position:'absolute',
@@ -138,7 +186,39 @@ const styles = StyleSheet.create({
         elevation:5,
     },
     brandMessageSmall:{
+        color:'white',
         fontSize:Theme.fonts.fontSize.title,
-        marginTop:Theme.sizes[3]
+        fontWeight:'bold',
+        marginTop:Theme.sizes[3],
+        shadowColor:'black',
+        shadowOffset:{width:2,height:4},
+        shadowRadius:2,
+        shadowOpacity:0.8,
+        elevation:5,
+    },
+    servicesheading:{
+        fontSize:Theme.fonts.fontSize.body,
+        marginVertical:Theme.sizes[2]//new
+    },
+    serviceRow:{
+        flexDirection:'row',
+        justifyContent:'space-evenly',//new
+        flexWrap:'wrap', //new
+        backgroundColor:Theme.colors.ui.nurseGreen, //new
+        paddingTop:Theme.sizes[3],//new
+        borderRadius:10, //new
+    },
+    service:{
+        height:80,
+        width:80,
+        justifyContent:'center',
+        alignItems:'center',
+        marginBottom:Theme.sizes[3],//new
+        backgroundColor:Theme.colors.ui.darkGreen,
+        borderRadius:10
+    },
+    serviceName:{
+        color:'white',
+        fontWeight:'bold'
     }
 })
