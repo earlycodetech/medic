@@ -7,7 +7,8 @@ import {
     SafeAreaView, 
     ImageBackground, 
     TouchableOpacity,
-    FlatList
+    FlatList,
+    Image
 } from 'react-native';
 import * as SplashScreen from 'expo-splash-screen';
 import * as Font from 'expo-font';
@@ -24,6 +25,8 @@ import { faPerson } from '@fortawesome/free-solid-svg-icons';
 import { faFileLines } from '@fortawesome/free-solid-svg-icons';
 import { faPills } from '@fortawesome/free-solid-svg-icons';
 import { faNewspaper } from '@fortawesome/free-solid-svg-icons';
+import { faStar } from '@fortawesome/free-solid-svg-icons';
+import { faStarHalf } from '@fortawesome/free-solid-svg-icons';
 import { Theme } from '../components/Theme';
 
 // service component names
@@ -36,6 +39,15 @@ const services = [
     {id:6,serviceName:'Prescription',serviceIcon:faFileLines},
     {id:7,serviceName:'Medicine',serviceIcon:faPills},
     {id:8,serviceName:'Articles',serviceIcon:faNewspaper},
+];
+
+const topProviders = [
+    {id:1,proName:'Mayo Clinic',rating:[4,5,5,5,4,4,5],logo:'https://cdn-icons-png.flaticon.com/512/2869/2869818.png'},
+    {id:2,proName:'Z Maternity',rating:[5,5,3,5,4,4,4],logo:'https://cdn-icons-png.flaticon.com/512/1048/1048611.png'},
+    {id:3,proName:'Bio Pharm',rating:[4,5,4,5,4,4,3],logo:'https://cdn-icons-png.flaticon.com/512/8355/8355694.png'},
+    {id:4,proName:'Heart Clinic',rating:[3,5,5,4,4,4,5],logo:'https://cdn-icons-png.flaticon.com/512/3901/3901586.png'},
+    {id:5,proName:'Sky Clinic',rating:[3,5,5,5,2,4,3],logo:'https://cdn-icons-png.flaticon.com/512/8353/8353823.png'},
+    {id:6,proName:'Synapse Lab',rating:[4,5,4,5,4,4,4],logo:'https://cdn-icons-png.flaticon.com/512/8351/8351887.png'},
 ];
 
 export function Home({navigation}){
@@ -118,6 +130,30 @@ export function Home({navigation}){
                             </TouchableOpacity>
                         ))
                     }
+                </View>
+
+                <View style={styles.topProvidersBlock}>
+                    <Text>Most rated providers</Text>
+                    <FlatList 
+                    data={topProviders}
+                    renderItem={({item}) => (
+                        <View style={styles.providerItem}>
+                            <Image source={{uri:item.logo}} style={styles.providerLogo} />
+                            <View style={styles.providerDetails}>
+                                <Text style={styles.providerName}>{item.proName}</Text>
+                                <View style={styles.rating}>
+                                    <FontAwesomeIcon icon={faStar} color='orange' size={Theme.sizes[4]} />
+                                    <FontAwesomeIcon icon={faStar} color='orange' size={Theme.sizes[4]} />
+                                    <FontAwesomeIcon icon={faStar} color='orange' size={Theme.sizes[4]} />
+                                    <FontAwesomeIcon icon={faStar} color='orange' size={Theme.sizes[4]} />
+                                    <FontAwesomeIcon icon={faStarHalf} color='orange' size={Theme.sizes[4]} />
+                                </View>
+                            </View>
+                        </View>
+                    )}
+                    key={item => item.id}
+                    horizontal={true}
+                    />
                 </View>
             </View>
         </SafeAreaView>
@@ -220,5 +256,30 @@ const styles = StyleSheet.create({
     serviceName:{
         color:'white',
         fontWeight:'bold'
+    },
+    topProvidersBlock:{
+        marginVertical:Theme.sizes[3]
+    },
+    providerItem:{
+        flexDirection:'row',
+        justifyContent:'space-between',
+        marginRight:Theme.sizes[1],
+        padding:Theme.sizes[4],
+        backgroundColor:Theme.colors.ui.darkGreen,
+    },
+    providerLogo:{
+        width:64,
+        height:64,
+        marginRight:Theme.sizes[1]
+    },
+    providerDetails:{
+
+    },
+    providerName:{
+        color:'#fff',
+        fontSize:Theme.fonts.fontSize.h5,
+    },
+    rating:{
+        flexDirection:'row'
     }
 })
