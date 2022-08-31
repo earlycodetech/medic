@@ -28,6 +28,9 @@ import { faNewspaper } from '@fortawesome/free-solid-svg-icons';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 import { faStarHalf } from '@fortawesome/free-solid-svg-icons';
 import { Theme } from '../components/Theme';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
+const Tab = createBottomTabNavigator();
 
 // service component names
 const services = [
@@ -50,33 +53,7 @@ const topProviders = [
     {id:6,proName:'Synapse Lab',rating:[4,5,4,5,4,4,4],logo:'https://cdn-icons-png.flaticon.com/512/8351/8351887.png'},
 ];
 
-export function Home({navigation}){
-    const [appIsReady, setAppIsReady] = useState(false);
-
-    useEffect(() => {
-        async function prepare() {
-            try {
-                await Font.loadAsync({Questrial_400Regular});
-                await new Promise(resolve => setTimeout(resolve, 1000));
-            } catch (e) {
-                console.warn(e);
-            } finally {
-                setAppIsReady(true);
-            }
-        }
-        prepare();
-    }, []);
-
-    const onLayoutRootView = useCallback(async () => {
-        if (appIsReady) {
-        await SplashScreen.hideAsync();
-        }
-    }, [appIsReady]);
-
-    if (!appIsReady) {
-        return null;
-    }
-
+const HomeScreen = () => {
     return (
         <SafeAreaView style={styles.areaView}>
             <View style={styles.container}>
@@ -133,7 +110,7 @@ export function Home({navigation}){
                 </View>
 
                 <View style={styles.topProvidersBlock}>
-                    <Text>Most rated providers</Text>
+                    <Text style={styles.topProvidersHeading}>Most rated providers</Text>
                     <FlatList 
                     data={topProviders}
                     renderItem={({item}) => (
@@ -157,6 +134,40 @@ export function Home({navigation}){
                 </View>
             </View>
         </SafeAreaView>
+    )
+}
+
+export function Home({navigation}){
+    const [appIsReady, setAppIsReady] = useState(false);
+
+    useEffect(() => {
+        async function prepare() {
+            try {
+                await Font.loadAsync({Questrial_400Regular});
+                await new Promise(resolve => setTimeout(resolve, 1000));
+            } catch (e) {
+                console.warn(e);
+            } finally {
+                setAppIsReady(true);
+            }
+        }
+        prepare();
+    }, []);
+
+    const onLayoutRootView = useCallback(async () => {
+        if (appIsReady) {
+        await SplashScreen.hideAsync();
+        }
+    }, [appIsReady]);
+
+    if (!appIsReady) {
+        return null;
+    }
+
+    return (
+        <Tab.Navigator>
+            <Tab.Screen name='Home' component={HomeScreen} />
+        </Tab.Navigator>
     );
 }
 
@@ -259,6 +270,12 @@ const styles = StyleSheet.create({
     },
     topProvidersBlock:{
         marginVertical:Theme.sizes[3]
+    },
+    topProvidersHeading:{
+        color:Theme.colors.ui.darkGreen,
+        fontSize:Theme.fonts.fontSize.body,
+        fontWeight:'bold',
+        marginBottom:Theme.sizes[1]
     },
     providerItem:{
         flexDirection:'row',
