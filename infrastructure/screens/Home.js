@@ -8,7 +8,8 @@ import {
     ImageBackground, 
     TouchableOpacity,
     FlatList,
-    Image
+    Image,
+    ScrollView
 } from 'react-native';
 import * as SplashScreen from 'expo-splash-screen';
 import * as Font from 'expo-font';
@@ -29,6 +30,10 @@ import { faStar } from '@fortawesome/free-solid-svg-icons';
 import { faStarHalf } from '@fortawesome/free-solid-svg-icons';
 import { Theme } from '../components/Theme';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Profile } from './Profile';
+import { History } from './History';
+import { Notifications } from './Notifications';
+import { Ionicons } from '@expo/vector-icons';
 
 const Tab = createBottomTabNavigator();
 
@@ -45,13 +50,113 @@ const services = [
 ];
 
 const topProviders = [
-    {id:1,proName:'Mayo Clinic',rating:[4,5,5,5,4,4,5],logo:'https://cdn-icons-png.flaticon.com/512/2869/2869818.png'},
+    {id:1,proName:'Mayo Clinic',rating:[1,5,2,2,1,1,2],logo:'https://cdn-icons-png.flaticon.com/512/2869/2869818.png'},
     {id:2,proName:'Z Maternity',rating:[5,5,3,5,4,4,4],logo:'https://cdn-icons-png.flaticon.com/512/1048/1048611.png'},
     {id:3,proName:'Bio Pharm',rating:[4,5,4,5,4,4,3],logo:'https://cdn-icons-png.flaticon.com/512/8355/8355694.png'},
     {id:4,proName:'Heart Clinic',rating:[3,5,5,4,4,4,5],logo:'https://cdn-icons-png.flaticon.com/512/3901/3901586.png'},
     {id:5,proName:'Sky Clinic',rating:[3,5,5,5,2,4,3],logo:'https://cdn-icons-png.flaticon.com/512/8353/8353823.png'},
     {id:6,proName:'Synapse Lab',rating:[4,5,4,5,4,4,4],logo:'https://cdn-icons-png.flaticon.com/512/8351/8351887.png'},
 ];
+
+['mayo clini',[1,5,3],'z maternity',[4,3,5]]
+
+const avgRating = (ratings) => {
+    const totalRatings = ratings.reduce((current,previous) => current + previous);
+    const meanRating = totalRatings / ratings.length;
+
+    let stars;
+
+    if (meanRating < 2 && Math.round(meanRating) !== 2 ) {
+        // 1 star rating
+        stars = (
+            <View style={styles.rating}>
+                <FontAwesomeIcon icon={faStar} color='orange' size={Theme.sizes[4]} />
+            </View>
+        )
+    }else if (meanRating <=1 || Math.round(meanRating) == 2) {
+        // 1.5 or more stars
+        stars = (
+            <View style={styles.rating}>
+                <FontAwesomeIcon icon={faStar} color='orange' size={Theme.sizes[4]} />
+                <FontAwesomeIcon icon={faStarHalf} color='orange' size={Theme.sizes[4]} />
+            </View>
+        )
+    }
+    else if (meanRating < 2 && Math.round(meanRating) !== 3) {
+        // 2 star rating
+        stars = (
+            <View style={styles.rating}>
+                <FontAwesomeIcon icon={faStar} color='orange' size={Theme.sizes[4]} />
+                <FontAwesomeIcon icon={faStar} color='orange' size={Theme.sizes[4]} />
+            </View>
+        )
+    }else if (meanRating < 2 || Math.round(meanRating) == 3) {
+        // 2.5 or more stars
+        stars = (
+            <View style={styles.rating}>
+                <FontAwesomeIcon icon={faStar} color='orange' size={Theme.sizes[4]} />
+                <FontAwesomeIcon icon={faStar} color='orange' size={Theme.sizes[4]} />
+                <FontAwesomeIcon icon={faStarHalf} color='orange' size={Theme.sizes[4]} />
+            </View>
+        )
+    }
+    else if (meanRating < 3 && Math.round(meanRating) !== 4) {
+        // 3 star rating
+        stars = (
+            <View style={styles.rating}>
+                <FontAwesomeIcon icon={faStar} color='orange' size={Theme.sizes[4]} />
+                <FontAwesomeIcon icon={faStar} color='orange' size={Theme.sizes[4]} />
+                <FontAwesomeIcon icon={faStar} color='orange' size={Theme.sizes[4]} />
+            </View>
+        )
+    }else if (meanRating < 3 || Math.round(meanRating) == 4) {
+        // 2.5 or more stars
+        stars = (
+            <View style={styles.rating}>
+                <FontAwesomeIcon icon={faStar} color='orange' size={Theme.sizes[4]} />
+                <FontAwesomeIcon icon={faStar} color='orange' size={Theme.sizes[4]} />
+                <FontAwesomeIcon icon={faStar} color='orange' size={Theme.sizes[4]} />
+                <FontAwesomeIcon icon={faStarHalf} color='orange' size={Theme.sizes[4]} />
+            </View>
+        )
+    }
+    else if (meanRating < 4 && Math.round(meanRating) !== 5) {
+        // 3 star rating
+        stars = (
+            <View style={styles.rating}>
+                <FontAwesomeIcon icon={faStar} color='orange' size={Theme.sizes[4]} />
+                <FontAwesomeIcon icon={faStar} color='orange' size={Theme.sizes[4]} />
+                <FontAwesomeIcon icon={faStar} color='orange' size={Theme.sizes[4]} />
+                <FontAwesomeIcon icon={faStar} color='orange' size={Theme.sizes[4]} />
+            </View>
+        )
+    }else if (meanRating < 4 || Math.round(meanRating) == 5) {
+        // 2.5 or more stars
+        stars = (
+            <View style={styles.rating}>
+                <FontAwesomeIcon icon={faStar} color='orange' size={Theme.sizes[4]} />
+                <FontAwesomeIcon icon={faStar} color='orange' size={Theme.sizes[4]} />
+                <FontAwesomeIcon icon={faStar} color='orange' size={Theme.sizes[4]} />
+                <FontAwesomeIcon icon={faStar} color='orange' size={Theme.sizes[4]} />
+                <FontAwesomeIcon icon={faStarHalf} color='orange' size={Theme.sizes[4]} />
+            </View>
+        )
+    }
+    else if (meanRating == 5) {
+        // 3 star rating
+        stars = (
+            <View style={styles.rating}>
+                <FontAwesomeIcon icon={faStar} color='orange' size={Theme.sizes[4]} />
+                <FontAwesomeIcon icon={faStar} color='orange' size={Theme.sizes[4]} />
+                <FontAwesomeIcon icon={faStar} color='orange' size={Theme.sizes[4]} />
+                <FontAwesomeIcon icon={faStar} color='orange' size={Theme.sizes[4]} />
+                <FontAwesomeIcon icon={faStar} color='orange' size={Theme.sizes[4]} />
+            </View>
+        )
+    }
+
+    return stars;
+}
 
 const HomeScreen = () => {
     return (
@@ -109,29 +214,53 @@ const HomeScreen = () => {
                     }
                 </View>
 
-                <View style={styles.topProvidersBlock}>
-                    <Text style={styles.topProvidersHeading}>Most rated providers</Text>
-                    <FlatList 
-                    data={topProviders}
-                    renderItem={({item}) => (
-                        <View style={styles.providerItem}>
-                            <Image source={{uri:item.logo}} style={styles.providerLogo} />
-                            <View style={styles.providerDetails}>
-                                <Text style={styles.providerName}>{item.proName}</Text>
-                                <View style={styles.rating}>
-                                    <FontAwesomeIcon icon={faStar} color='orange' size={Theme.sizes[4]} />
-                                    <FontAwesomeIcon icon={faStar} color='orange' size={Theme.sizes[4]} />
-                                    <FontAwesomeIcon icon={faStar} color='orange' size={Theme.sizes[4]} />
-                                    <FontAwesomeIcon icon={faStar} color='orange' size={Theme.sizes[4]} />
-                                    <FontAwesomeIcon icon={faStarHalf} color='orange' size={Theme.sizes[4]} />
+                <ScrollView>
+                    <View style={styles.topProvidersBlock}>
+                        <Text style={styles.topProvidersHeading}>Most rated providers</Text>
+                        <FlatList 
+                        data={topProviders}
+                        renderItem={({item}) => (
+                            <View style={styles.providerItem}>
+                                <Image source={{uri:item.logo}} style={styles.providerLogo} />
+                                <View style={styles.providerDetails}>
+                                    <Text style={styles.providerName}>{item.proName}</Text>
+
+                                    {avgRating(item.rating)}
                                 </View>
                             </View>
-                        </View>
-                    )}
-                    key={item => item.id}
-                    horizontal={true}
-                    />
-                </View>
+                        )}
+                        key={item => item.id}
+                        horizontal={true}
+                        />
+                    </View>
+
+                    <View style={styles.topProvidersBlock}>
+                        <Text 
+                        style={[styles.topProvidersHeading,{color:Theme.colors.ui.nurseGray}]}
+                        >Featured providers</Text>
+                        <FlatList 
+                        data={topProviders}
+                        renderItem={({item}) => (
+                            <View style={styles.providerItemFeatured}>
+                                <Image source={{uri:item.logo}} style={styles.providerLogo} />
+                                <View style={styles.providerDetails}>
+                                    <Text style={styles.providerName}>{item.proName}</Text>
+                                    <View style={styles.rating}>
+                                        <FontAwesomeIcon icon={faStar} color='orange' size={Theme.sizes[4]} />
+                                        <FontAwesomeIcon icon={faStar} color='orange' size={Theme.sizes[4]} />
+                                        <FontAwesomeIcon icon={faStar} color='orange' size={Theme.sizes[4]} />
+                                        <FontAwesomeIcon icon={faStar} color='orange' size={Theme.sizes[4]} />
+                                        <FontAwesomeIcon icon={faStarHalf} color='orange' size={Theme.sizes[4]} />
+                                    </View>
+                                </View>
+                            </View>
+                        )}
+                        key={item => item.id}
+                        horizontal={true}
+                        />
+                    </View>
+                </ScrollView>
+
             </View>
         </SafeAreaView>
     )
@@ -165,8 +294,31 @@ export function Home({navigation}){
     }
 
     return (
-        <Tab.Navigator>
-            <Tab.Screen name='Home' component={HomeScreen} />
+        <Tab.Navigator 
+        screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused, color, size }) => {
+            let iconName;
+    
+            if (route.name === 'HomeScreen') {
+            iconName = focused ? 'home-sharp' : 'home-outline';
+            } else if (route.name === 'Profile') {
+            iconName = focused ? 'ios-person-circle' : 'ios-person-circle-outline';
+            }else if (route.name === 'History') {
+            iconName = focused ? 'md-file-tray-stacked' : 'ios-file-tray-stacked-outline';
+            }else if (route.name === 'Notifications') {
+            iconName = focused ? 'notifications' : 'notifications-outline';
+            }
+    
+            return <Ionicons name={iconName} size={size} color={color} />;
+        },
+        tabBarActiveTintColor: Theme.colors.ui.nursePurple,
+        tabBarInactiveTintColor: Theme.colors.ui.darkGreen,
+        })}
+        >
+            <Tab.Screen name='HomeScreen' component={HomeScreen} options={{headerShown:false}}/>
+            <Tab.Screen name='Profile' component={Profile} options={{headerShown:false}}/>
+            <Tab.Screen name='History' component={History} options={{headerShown:false}}/>
+            <Tab.Screen name='Notifications' component={Notifications} options={{headerShown:false}}/>
         </Tab.Navigator>
     );
 }
@@ -283,6 +435,13 @@ const styles = StyleSheet.create({
         marginRight:Theme.sizes[1],
         padding:Theme.sizes[4],
         backgroundColor:Theme.colors.ui.darkGreen,
+    },
+    providerItemFeatured:{
+        flexDirection:'row',
+        justifyContent:'space-between',
+        marginRight:Theme.sizes[1],
+        padding:Theme.sizes[4],
+        backgroundColor:Theme.colors.ui.nurseGray,
     },
     providerLogo:{
         width:64,
