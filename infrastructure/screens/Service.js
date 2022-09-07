@@ -50,7 +50,11 @@ export function Service () {
                                 <Text style={styles.priceInfo}>NGN23,500</Text>
                             </View>
                         </View>
-                        <Text>Hello Nigeria Hello Nigeria Hello Nigeria Hello Nigeria Hello Nigeria Hello Nigeria</Text>
+                        <Text>
+                            Z Medicals Laboratory is a state of the art laboratory in the city of Abuja, 
+                            which offers a fully automated laboratory services in various sub-specialties. 
+                            With the innovative use of new technologies.
+                        </Text>
                     </View>
                     <View style={styles.serviceActions}>
                         <TouchableOpacity style={styles.bookingBlock}>
@@ -82,7 +86,7 @@ const styles = StyleSheet.create({
         marginBottom:Theme.sizes[3],
         backgroundColor:Theme.colors.bg.secondary,
         borderWidth:1,
-        borderColor:Theme.colors.bg.quartenary,
+        borderColor:Theme.colors.bg.tertiary,
         borderRadius:8
     },
     serviceImg:{
@@ -117,7 +121,7 @@ const styles = StyleSheet.create({
         marginBottom:Theme.sizes[3],
         backgroundColor:Theme.colors.bg.secondary,
         borderWidth:1,
-        borderColor:Theme.colors.bg.quartenary,
+        borderColor:Theme.colors.bg.tertiary,
         borderRadius:8
     },
     descHeaders:{
