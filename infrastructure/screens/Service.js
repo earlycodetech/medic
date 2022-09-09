@@ -1,10 +1,13 @@
+import { useState } from 'react';
 import { View, Text, StyleSheet,SafeAreaView,Image,TouchableOpacity, ScrollView } from 'react-native';
 import { TextInput,Button } from 'react-native-paper';
 import { Theme } from '../components/Theme';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faLocationDot, faNoteSticky,faWallet } from '@fortawesome/free-solid-svg-icons';
+import { faAngleDown, faAngleUp, faLocationDot, faNoteSticky,faWallet } from '@fortawesome/free-solid-svg-icons';
 
 export function Service () {
+    const [tap,setTap] = useState(false);
+
     return (
         <SafeAreaView style={styles.areaView}>
             <View style={styles.container}>
@@ -26,7 +29,7 @@ export function Service () {
                             </View>
                             <View style={styles.addressInfo}>
                                 <FontAwesomeIcon icon={faLocationDot} 
-                                size={Theme.fonts.fontSize.body} 
+                                size={Theme.sizes[3]} 
                                 color={Theme.colors.brand.brandGreen} 
                                 style={{marginRight:4}}/>
                                 <Text style={styles.address}>78 Aminu Kano Crescent, Wuse 2, Abuja, Nigeria</Text>
@@ -37,14 +40,14 @@ export function Service () {
                         <View style={styles.descHeaders}>
                             <View style={styles.description}>
                                 <FontAwesomeIcon icon={faNoteSticky} 
-                                size={Theme.fonts.fontSize.h5} 
+                                size={Theme.sizes[3]} 
                                 color={Theme.colors.brand.brandGreen} 
                                 style={{marginRight:4}}/>
                                 <Text style={styles.descInfo}>Description</Text>
                             </View>
                             <View style={styles.price}>
                                 <FontAwesomeIcon icon={faWallet} 
-                                size={Theme.fonts.fontSize.h5} 
+                                size={Theme.sizes[3]} 
                                 color={Theme.colors.brand.brandGreen} 
                                 style={{marginRight:4}}/>
                                 <Text style={styles.priceInfo}>NGN23,500</Text>
@@ -57,11 +60,33 @@ export function Service () {
                         </Text>
                     </View>
                     <View style={styles.serviceActions}>
-                        <TouchableOpacity style={styles.bookingBlock}>
-                            <Text>BOOK THIS SERVICE</Text>
-                            <View style={styles.bookNow}>
-                                <TextInput placeholder='search your location'></TextInput>
-                                <Button>BOOK NOW</Button>
+                        <TouchableOpacity 
+                        style={styles.bookingBlock}
+                        onPress={() => {
+                            if(!tap){
+                                setTap(true)
+                            }else if (tap){
+                                setTap(false)
+                            }
+                        }}
+                        >
+                            <View style={styles.actionRow}>
+                                <Text style={styles.actionText}>BOOK THIS SERVICE</Text>
+                                <FontAwesomeIcon icon={tap ? faAngleDown : faAngleUp} />
+                            </View>
+                            <View style={[styles.bookNow,
+                                {display:tap ? 'none' : null}]}>
+                                <TextInput placeholder='search your location'
+                                style={{marginBottom:Theme.sizes[3]}}
+                                outlineColor={Theme.colors.ui.nursePurple}
+                                activeOutlineColor={Theme.colors.bg.tertiary}
+                                mode='outlined'
+                                ></TextInput>
+                                <Button 
+                                mode='contained'
+                                contentStyle={{paddingVertical:Theme.sizes[2]}}
+                                color={Theme.colors.ui.nursePurple}
+                                >BOOK NOW</Button>
                             </View>
                         </TouchableOpacity>
                     </View>
@@ -144,6 +169,21 @@ const styles = StyleSheet.create({
         fontWeight:'bold'
     },
     priceInfo:{
+        fontWeight:'bold'
+    },
+    serviceActions:{
+        paddingHorizontal:Theme.sizes[2],
+        paddingVertical:Theme.sizes[4],
+        backgroundColor:Theme.colors.bg.secondary,
+        borderWidth:1,
+        borderColor:Theme.colors.bg.tertiary,
+        borderRadius:8
+    },
+    actionRow:{
+        flexDirection:'row',
+        justifyContent:'space-between'
+    },
+    actionText:{
         fontWeight:'bold'
     }
 });
