@@ -1,96 +1,107 @@
 import { useState } from 'react';
-import { View, Text, StyleSheet,SafeAreaView,Image,TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, StyleSheet,SafeAreaView,Image,TouchableOpacity, ScrollView, Dimensions } from 'react-native';
 import { TextInput,Button } from 'react-native-paper';
 import { Theme } from '../components/Theme';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faAngleDown, faAngleUp, faLocationDot, faNoteSticky,faWallet } from '@fortawesome/free-solid-svg-icons';
+import MapView,{PROVIDER_GOOGLE} from 'react-native-maps';
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+
+const {width,height} = Dimensions.get('window');
+const ASPECT_RATIO = width/height;
+const LATITUDE_DELTA = 0.02;
+const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
+const INITIAL_POSITION = {
+  latitude: 9.075178189712897, 
+  longitude: 7.464408754830511, 
+  latitudeDelta: LATITUDE_DELTA,
+  longitudeDelta: LONGITUDE_DELTA
+}
 
 export function Service () {
     const [tap,setTap] = useState(false);
 
     return (
         <SafeAreaView style={styles.areaView}>
+            <View style={styles.locationView}>
+                <MapView
+                style={styles.map}
+                provider={PROVIDER_GOOGLE}
+                initialRegion={INITIAL_POSITION}
+                
+                />
+
+                <View style={styles.serviceHeaders}>
+                    <Image 
+                    source={require('../../assets/images/services/diagnosis-service.jpg')} 
+                    style={styles.serviceImg}
+                    />
+                    <View style={styles.headersInfo}>
+                        <Text style={styles.title}>Diagnosis for Need of Bone Calcium</Text>
+                        <View style={styles.subHeadersInfo}>
+                            <TouchableOpacity>
+                                <Text style={styles.subHeadersText}>Diagnosis</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity>
+                                <Text style={styles.subHeadersText}>Z Medicals</Text>
+                            </TouchableOpacity>
+                        </View>
+                        <View style={styles.addressInfo}>
+                            <FontAwesomeIcon icon={faLocationDot} 
+                            size={Theme.sizes[3]} 
+                            color={Theme.colors.brand.brandGreen} 
+                            style={{marginRight:4}}/>
+                            <Text style={styles.address}>78 Aminu Kano Crescent, Wuse 2, Abuja, Nigeria</Text>
+                        </View>
+                    </View>
+                </View>
+            </View>
+
             <View style={styles.container}>
-                <ScrollView>
-                    <View style={styles.serviceHeaders}>
-                        <Image 
-                        source={require('../../assets/images/services/diagnosis-service.jpg')} 
-                        style={styles.serviceImg}
-                        />
-                        <View style={styles.headersInfo}>
-                            <Text style={styles.title}>Diagnosis for Need of Bone Calcium</Text>
-                            <View style={styles.subHeadersInfo}>
-                                <TouchableOpacity>
-                                    <Text style={styles.subHeadersText}>Diagnosis</Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity>
-                                    <Text style={styles.subHeadersText}>Z Medicals</Text>
-                                </TouchableOpacity>
-                            </View>
-                            <View style={styles.addressInfo}>
-                                <FontAwesomeIcon icon={faLocationDot} 
-                                size={Theme.sizes[3]} 
-                                color={Theme.colors.brand.brandGreen} 
-                                style={{marginRight:4}}/>
-                                <Text style={styles.address}>78 Aminu Kano Crescent, Wuse 2, Abuja, Nigeria</Text>
-                            </View>
+                <View style={styles.serviceDesc}>
+                    <View style={styles.descHeaders}>
+                        <View style={styles.description}>
+                            <FontAwesomeIcon icon={faNoteSticky} 
+                            size={Theme.sizes[3]} 
+                            color={Theme.colors.brand.brandGreen} 
+                            style={{marginRight:4}}/>
+                            <Text style={styles.descInfo}>Description</Text>
+                        </View>
+                        <View style={styles.price}>
+                            <FontAwesomeIcon icon={faWallet} 
+                            size={Theme.sizes[3]} 
+                            color={Theme.colors.brand.brandGreen} 
+                            style={{marginRight:4}}/>
+                            <Text style={styles.priceInfo}>NGN23,500</Text>
                         </View>
                     </View>
-                    <View style={styles.serviceDesc}>
-                        <View style={styles.descHeaders}>
-                            <View style={styles.description}>
-                                <FontAwesomeIcon icon={faNoteSticky} 
-                                size={Theme.sizes[3]} 
-                                color={Theme.colors.brand.brandGreen} 
-                                style={{marginRight:4}}/>
-                                <Text style={styles.descInfo}>Description</Text>
-                            </View>
-                            <View style={styles.price}>
-                                <FontAwesomeIcon icon={faWallet} 
-                                size={Theme.sizes[3]} 
-                                color={Theme.colors.brand.brandGreen} 
-                                style={{marginRight:4}}/>
-                                <Text style={styles.priceInfo}>NGN23,500</Text>
-                            </View>
-                        </View>
-                        <Text>
-                            Z Medicals Laboratory is a state of the art laboratory in the city of Abuja, 
-                            which offers a fully automated laboratory services in various sub-specialties. 
-                            With the innovative use of new technologies.
-                        </Text>
-                    </View>
-                    <View style={styles.serviceActions}>
-                        <TouchableOpacity 
-                        style={styles.bookingBlock}
-                        onPress={() => {
-                            if(!tap){
-                                setTap(true)
-                            }else if (tap){
-                                setTap(false)
-                            }
+                    <Text>
+                        Z Medicals Laboratory is a state of the art laboratory in the city of Abuja, 
+                        which offers a fully automated laboratory services in various sub-specialties. 
+                        With the innovative use of new technologies.
+                    </Text>
+                </View>
+                <View style={styles.serviceActions}>
+                    <GooglePlacesAutocomplete
+                    placeholder='Search for your location'
+                        query={{
+                            key:'AIzaSyANfxHXpxNXh2H8HlK1y-Vm_tCe-m2CwoA',
+                            language:'en'
                         }}
-                        >
-                            <View style={styles.actionRow}>
-                                <Text style={styles.actionText}>BOOK THIS SERVICE</Text>
-                                <FontAwesomeIcon icon={tap ? faAngleDown : faAngleUp} />
-                            </View>
-                            <View style={[styles.bookNow,
-                                {display:tap ? 'none' : null}]}>
-                                <TextInput placeholder='search your location'
-                                style={{marginBottom:Theme.sizes[3]}}
-                                outlineColor={Theme.colors.ui.nursePurple}
-                                activeOutlineColor={Theme.colors.bg.tertiary}
-                                mode='outlined'
-                                ></TextInput>
-                                <Button 
-                                mode='contained'
-                                contentStyle={{paddingVertical:Theme.sizes[2]}}
-                                color={Theme.colors.ui.nursePurple}
-                                >BOOK NOW</Button>
-                            </View>
-                        </TouchableOpacity>
-                    </View>
-                </ScrollView>
+                        minLength={3}
+                        enablePoweredByContainer={false}
+                        onPress={(data,details = null) => {
+                            console.log('Details are as follow',details)
+                        }}
+                        fetchDetails={true}
+                        nearbyPlacesAPI='GooglePlacesSearch'
+                    />
+
+                    <Button 
+                    mode='contained'
+                    contentStyle={{paddingVertical:Theme.sizes[2]}}
+                    >BOOK SERVICE</Button>
+                </View>
             </View>
         </SafeAreaView>
     )
@@ -100,19 +111,32 @@ const styles = StyleSheet.create({
     areaView:{
         flex:1
     },
-    container:{
+    locationView:{
+        flex:3
+    },
+    map:{
         flex:1,
+    },
+    container:{
+        flex:3,
         padding:Theme.sizes[3],
     },
     serviceHeaders:{
-        flex:1,
+        position:'absolute',
+        bottom:10,
         flexDirection:'row',
         padding:Theme.sizes[2],
+        marginHorizontal:Theme.sizes[3],
         marginBottom:Theme.sizes[3],
         backgroundColor:Theme.colors.bg.secondary,
         borderWidth:1,
         borderColor:Theme.colors.bg.tertiary,
-        borderRadius:8
+        borderRadius:8,
+        shadowColor:'#000',
+        shadowOffset:{width:4,height:4},
+        shadowRadius:4,
+        shadowOpacity:0.5,
+        elevation:4
     },
     serviceImg:{
         width:120,
@@ -141,7 +165,6 @@ const styles = StyleSheet.create({
         flexDirection:'row'
     },
     serviceDesc:{
-        flex:1,
         padding:Theme.sizes[2],
         marginBottom:Theme.sizes[3],
         backgroundColor:Theme.colors.bg.secondary,
@@ -172,8 +195,8 @@ const styles = StyleSheet.create({
         fontWeight:'bold'
     },
     serviceActions:{
-        paddingHorizontal:Theme.sizes[2],
-        paddingVertical:Theme.sizes[4],
+        flex:1,
+        padding:Theme.sizes[2],
         backgroundColor:Theme.colors.bg.secondary,
         borderWidth:1,
         borderColor:Theme.colors.bg.tertiary,
