@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { View,Text,StyleSheet, SafeAreaView, ScrollView, TouchableOpacity } from 'react-native';
+import { View,Text,StyleSheet, SafeAreaView, ScrollView, TouchableOpacity,Alert } from 'react-native';
 import * as SplashScreen from 'expo-splash-screen';
 import * as Font from 'expo-font';
 import { Questrial_400Regular } from '@expo-google-fonts/questrial';
@@ -7,11 +7,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faCross } from '@fortawesome/free-solid-svg-icons';
 import { Button,TextInput } from 'react-native-paper';
 import { Theme } from '../components/Theme';
-// import { authentication } from '../../services/firebase';
-import {app} from '../../services/firebase';
-import { createUserWithEmailAndPassword,getAuth } from 'firebase/auth';
-
-const auth = getAuth(app);
+import {authentication,db} from '../../services/firebase';
+import { createUserWithEmailAndPassword,onAuthStateChanged } from 'firebase/auth';
+import { doc,setDoc } from 'firebase/firestore';
 
 export function Signup({navigation}){
     const [appIsReady, setAppIsReady] = useState(false);
@@ -23,13 +21,61 @@ export function Signup({navigation}){
     const [password,setPassword] = useState('');
     const [desc,setDesc] = useState('');
 
+    //timestamp generator
+    const getNewTimestamp = () => {
+        const now = new Date();
+        return now.getTime();
+    }
+
+    const providerRecordTemplate = {
+        accountType:accountType,
+        firstName:firstName,
+        lastName:lastName,
+        phoneNumber:phone,
+        ratings:[4,5,2,3,5],
+        geoPoint:{Latitude:9.776353535,Longitude:3.5454455454},
+        specialization:'Community Pharmacy',
+        specialties:['Therapy','Community Pharmacy','Clinical Pharmacy'],
+        description:'Haven worked in the public sector for more than 15 years, I have gathered lots of experiences',
+        timestamp:getNewTimestamp()
+    }
+
+    const customerRecordTemplate = {
+        accountType:accountType,
+        firstName:firstName,
+        lastName:lastName,
+        phoneNumber:phone,
+        geoPoint:{Latitude:9.776353535,Longitude:3.5454455454},
+        timestamp:getNewTimestamp()
+    }
+
     //create an authenticated user
     function CreateUserAuth () {
-        createUserWithEmailAndPassword(auth,email,password)
-        .then((userCredentials) => {
-            console.log(userCredentials)
-        })
-        .catch(error => console.error(error))
+        createUserWithEmailAndPassword(authentication,email,password)
+        .then(() => onAuthStateChanged(authentication,(user)=>{
+            const userUID = user.uid;
+            let userRecords;
+
+            if(accountType==='provider'){
+                userRecords = providerRecordTemplate;
+            }else if(accountType === 'individual'){
+                userRecords = customerRecordTemplate;
+            }
+
+            //insert other records to firestore
+            setDoc(doc(db,'users',userUID),userRecords)
+            .then(()=> navigation.navigate('Home',{userUID:userUID}))
+            .catch(() => Alert.alert(
+                'Status',
+                'Failed while interracting with database',
+                [{text:'Back to Intro',onPress:navigation.navigate('Login')}]
+            ))
+        }))
+        .catch(() => Alert.alert(
+            'Status',
+            'Failed while interracting with database',
+            [{text:'Back to Intro',onPress:navigation.navigate('Intro')}]
+        ))
     }
 
     useEffect(() => {
@@ -184,18 +230,18 @@ const styles = StyleSheet.create({
         alignItems:'center'
     },
     brandName:{
-        fontSize:Theme.fonts.fontSizePoint.h4,
+        fontSize:34,
         fontFamily:'Questrial_400Regular',
     },
     headText:{
-        fontSize:Theme.fonts.fontSizePoint.h3,
+        fontSize:45,
         marginVertical:Theme.sizes[4],
     },
     btnGroup:{
         flexDirection:'row',
     },
     subHeading:{
-        fontSize:Theme.fonts.fontSizePoint.h5,
+        fontSize:24,
         marginVertical:Theme.sizes[3],
     },
     textInline:{
@@ -203,6 +249,6 @@ const styles = StyleSheet.create({
         marginVertical:Theme.sizes[2],
     },
     ctaText:{
-        fontSize:Theme.fonts.fontSize.body
+        fontSize:16
     }
 })

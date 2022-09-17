@@ -85,7 +85,7 @@ export function Service () {
                     <GooglePlacesAutocomplete
                     placeholder='Search for your location'
                         query={{
-                            key:'AIzaSyANfxHXpxNXh2H8HlK1y-Vm_tCe-m2CwoA',
+                            key:'',
                             language:'en'
                         }}
                         minLength={3}

@@ -266,8 +266,11 @@ const HomeScreen = () => {
     )
 }
 
-export function Home({navigation}){
+export function Home({navigation,route}){
     const [appIsReady, setAppIsReady] = useState(false);
+
+    //access data from a previous screen
+    const {userUID} = route.params;
 
     useEffect(() => {
         async function prepare() {
@@ -336,7 +339,7 @@ const styles = StyleSheet.create({
         justifyContent:'space-between'
     },
     headerText:{
-        fontSize:Theme.fonts.fontSize.h5,
+        fontSize:24,
         fontWeight:'bold',
         color:Theme.colors.ui.nursePurple
     },
@@ -375,7 +378,7 @@ const styles = StyleSheet.create({
         borderRadius:10
     },
     brandMessage:{
-        fontSize:Theme.fonts.fontSize.h4,
+        fontSize:34,
         fontWeight:'bold',
         color:'white',
         shadowColor:'black',
@@ -386,7 +389,7 @@ const styles = StyleSheet.create({
     },
     brandMessageSmall:{
         color:'white',
-        fontSize:Theme.fonts.fontSize.title,
+        fontSize:20,
         fontWeight:'bold',
         marginTop:Theme.sizes[3],
         shadowColor:'black',
@@ -396,7 +399,7 @@ const styles = StyleSheet.create({
         elevation:5,
     },
     servicesheading:{
-        fontSize:Theme.fonts.fontSize.body,
+        fontSize:16,
         marginVertical:Theme.sizes[2]//new
     },
     serviceRow:{
@@ -425,7 +428,7 @@ const styles = StyleSheet.create({
     },
     topProvidersHeading:{
         color:Theme.colors.ui.darkGreen,
-        fontSize:Theme.fonts.fontSize.body,
+        fontSize:16,
         fontWeight:'bold',
         marginBottom:Theme.sizes[1]
     },
@@ -453,7 +456,7 @@ const styles = StyleSheet.create({
     },
     providerName:{
         color:'#fff',
-        fontSize:Theme.fonts.fontSize.h5,
+        fontSize:25,
     },
     rating:{
         flexDirection:'row'
