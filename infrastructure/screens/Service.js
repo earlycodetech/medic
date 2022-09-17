@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faAngleDown, faAngleUp, faLocationDot, faNoteSticky,faWallet } from '@fortawesome/free-solid-svg-icons';
 import MapView,{PROVIDER_GOOGLE} from 'react-native-maps';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import { googleMapsAPIKey } from '../../services/secret/googlemapsapi.key';
 
 const {width,height} = Dimensions.get('window');
 const ASPECT_RATIO = width/height;
@@ -85,7 +86,7 @@ export function Service () {
                     <GooglePlacesAutocomplete
                     placeholder='Search for your location'
                         query={{
-                            key:'',
+                            key:googleMapsAPIKey,
                             language:'en'
                         }}
                         minLength={3}

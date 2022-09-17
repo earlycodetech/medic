@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { View,Text,StyleSheet, SafeAreaView } from 'react-native';
+import { View,Text,StyleSheet, SafeAreaView, Platform, StatusBar } from 'react-native';
 import * as SplashScreen from 'expo-splash-screen';
 import * as Font from 'expo-font';
 import { Questrial_400Regular } from '@expo-google-fonts/questrial';
@@ -55,8 +55,9 @@ export function Intro({navigation}){
                     >Sign up</Button>
 
                     <Button mode='outlined' 
-                    color={Theme.colors.text.tertiary}
-                    contentStyle={{paddingVertical:Theme.sizes[3]}}
+                    color='white'
+                    contentStyle={{paddingVertical:Theme.sizes[3],
+                        backgroundColor:Theme.colors.ui.nurseGray}}
                     onPress={() => navigation.navigate('Login')}
                     >Sign in</Button>
                 </View>
@@ -68,6 +69,7 @@ export function Intro({navigation}){
 const styles = StyleSheet.create({
     areaView:{
         flex:1,
+        marginTop:Platform.OS === 'android' ? StatusBar.currentHeight : null
     },
     container:{
         flex:1,
@@ -86,6 +88,7 @@ const styles = StyleSheet.create({
         fontFamily:'Questrial_400Regular',
     },
     brandInfo:{
-        fontSize:Theme.fonts.fontSizePoint.body
+        fontSize:Theme.fonts.fontSizePoint.body,
+        textAlign:'center'
     }
 })
