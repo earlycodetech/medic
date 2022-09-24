@@ -1,18 +1,25 @@
-import { useState,useEffect } from 'react';
-import { View,Text,StyleSheet,SafeAreaView,ScrollView,Platform,StatusBar,FlatList,Alert } from 'react-native';
-import { Card,Title,Button } from 'react-native-paper';
+import { useState, useEffect, useCallback } from 'react';
+import { View,Text,StyleSheet, SafeAreaView, Platform, StatusBar, FlatList } from 'react-native';
+import * as SplashScreen from 'expo-splash-screen';
+import * as Font from 'expo-font';
+import { Questrial_400Regular } from '@expo-google-fonts/questrial';
 import { Theme } from '../components/Theme';
+import { Card,Title,Button } from 'react-native-paper';
 import { db } from '../../services/firebase';
-import { onSnapshot, collection, getDoc, doc } from 'firebase/firestore';
+import { collection,where,query,onSnapshot } from 'firebase/firestore';
 
-export function Services({navigation}){
+export function Category({navigation,route}){
+    const [appIsReady, setAppIsReady] = useState(false);
     const [services,setServices] = useState([]);
-    const [providerName,setProviderName] = useState(''); //for holding provider name
+    const {categoryName} = route.params;
+
+    const q = collection(db,'services');
+    const filter = query(q,where('category','==',categoryName));
 
     useEffect(() => {
         const allServices = [];
 
-        onSnapshot(collection(db,'services'),(onSnap) => {
+        onSnapshot(filter,(onSnap) => {
             onSnap.forEach(item => {
                 const itemData = item.data();
                 itemData.docId = item.id;
@@ -22,22 +29,34 @@ export function Services({navigation}){
         })
     },[]);
 
-    // function ProviderName(docId = 'SYWgIcSEy2QCNu5Wh0RlZPpZj6w1'){
-    //      //query tp get provider name
-    //      const fullName = getDoc(doc(db,'users',docId))
-    //      .then((document) => {
-    //          const docData = document.data();
-    //          return docData.firstName + ' ' + docData.lastName;
-    //      })
-    //      .catch(error => {
-    //          Alert.alert('Error Response',error,[{text:'Okay'}])
-    //      })
+    console.log('Therapy only',services);
 
-    //      return fullName;
-    // }
+    useEffect(() => {
+        async function prepare() {
+            try {
+                await Font.loadAsync({Questrial_400Regular});
+                await new Promise(resolve => setTimeout(resolve, 1000));
+            } catch (e) {
+                console.warn(e);
+            } finally {
+                setAppIsReady(true);
+            }
+        }
+        prepare();
+    }, []);
 
+    const onLayoutRootView = useCallback(async () => {
+        if (appIsReady) {
+        await SplashScreen.hideAsync();
+        }
+    }, [appIsReady]);
+
+    if (!appIsReady) {
+        return null;
+    }
+
+    //For Flatlist: to display each service
     function ServiceCard(service){
-        //display provider with the rest of the data
         return(
             <Card style={{marginBottom:Theme.sizes[2]}}>
                 <Card.Cover source={{ uri: service.imageUrl }} />
@@ -60,7 +79,7 @@ export function Services({navigation}){
        
     }
 
-    return(
+    return (
         <SafeAreaView style={styles.areaView}>
             <View style={styles.container}>
                 <View style={styles.servicesList}>
@@ -75,7 +94,7 @@ export function Services({navigation}){
                 </View>
             </View>
         </SafeAreaView>
-    )
+    );
 }
 
 const styles = StyleSheet.create({
@@ -85,8 +104,8 @@ const styles = StyleSheet.create({
     },
     container:{
         flex:1,
-        paddingHorizontal:Theme.sizes[3],
-        paddingBottom:Theme.sizes[3],
+        padding:Theme.sizes[3],
+        justifyContent:'space-between'
     },
     priceRow:{
         flexDirection:'row',

@@ -8,6 +8,7 @@ import { Notifications } from "../screens/Notifications";
 import { History } from "../screens/History";
 import {Services} from "../screens/Services";
 import { AddService } from "../screens/providers/AddService";
+import { Category } from "../screens/Category";
 
 const Stack = createNativeStackNavigator();
 
@@ -18,9 +19,10 @@ export function StackNavigation () {
             <Stack.Screen name="Intro" component={Intro} options={{headerShown:false}} />
             <Stack.Screen name="Signup" component={Signup} options={{headerShown:false}} />
             <Stack.Screen name="Profile" component={Profile} options={{headerShown:true}} />
-            <Stack.Screen name="Login" component={Login} />
-            <Stack.Screen name="Services" component={Services} options={{headerShown:false}} />
+            <Stack.Screen name="Login" component={Login} options={{}} />
+            <Stack.Screen name="Services" component={Services} options={{headerShown:true}} />
             <Stack.Screen name="AddService" component={AddService} options={{headerShown:false}} />
+            <Stack.Screen name="Category" component={Category} options={{headerShown:true}} />
         </Stack.Navigator>
     )
 }

@@ -65,4 +65,9 @@ const styles = StyleSheet.create({
         paddingHorizontal:Theme.sizes[3],
         paddingBottom:Theme.sizes[3],
     },
+    headText:{
+        marginTop:Theme.sizes[3],
+        fontWeight:'bold',
+        color:Theme.colors.ui.nurseGray
+    }
 })

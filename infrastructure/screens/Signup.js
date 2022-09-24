@@ -105,7 +105,7 @@ export function Signup({navigation}){
     return (
         <SafeAreaView style={styles.areaView}>
             <View style={styles.container}>
-                <ScrollView>
+                <ScrollView showsVerticalScrollIndicator={false}>
                     <View style={styles.brandBlock}>
                         <FontAwesomeIcon icon={faCross} 
                         size={Theme.sizes[4]}  
