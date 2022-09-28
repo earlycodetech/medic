@@ -11,7 +11,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 const Tab = createBottomTabNavigator();
 
-export function Home({navigation,route}){
+export function Home({route}){
     const [appIsReady, setAppIsReady] = useState(false);
 
     //access data from a previous screen
@@ -47,7 +47,7 @@ export function Home({navigation,route}){
         tabBarIcon: ({ focused, color, size }) => {
             let iconName;
     
-            if (route.name === 'HomeScreen') {
+            if (route.name === 'My Home') {
             iconName = focused ? 'home-sharp' : 'home-outline';
             } else if (route.name === 'Profile') {
             iconName = focused ? 'ios-person-circle' : 'ios-person-circle-outline';
@@ -63,7 +63,7 @@ export function Home({navigation,route}){
         tabBarInactiveTintColor: Theme.colors.ui.darkGreen,
         })}
         >
-            <Tab.Screen name='CustomerHome' component={CustomerHome} options={{headerShown:false}}/>
+            <Tab.Screen name='My Home' component={CustomerHome} options={{headerShown:false}}/>
             <Tab.Screen name='Profile' component={Profile} options={{headerShown:false}}/>
             <Tab.Screen name='History' component={History} options={{headerShown:false}}/>
             <Tab.Screen name='Notifications' component={Notifications} options={{headerShown:false}}/>

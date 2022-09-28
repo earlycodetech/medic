@@ -53,7 +53,8 @@ export function Services({navigation}){
                     mode='contained' 
                     color={Theme.colors.ui.nursePurple}
                     contentStyle={{paddingHorizontal:8}}
-                    >Order</Button>
+                    onPress={() => navigation.navigate('Service',{serviceUID:service.docId})}
+                    >View Details</Button>
                 </Card.Actions>
             </Card>
         )

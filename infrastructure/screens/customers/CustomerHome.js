@@ -8,11 +8,11 @@ import {
     TouchableOpacity,
     FlatList,
     Image,
-    ScrollView
+    ScrollView,
+    Platform,
+    StatusBar
 } from 'react-native';
-import { Questrial_400Regular } from '@expo-google-fonts/questrial';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faCross } from '@fortawesome/free-solid-svg-icons';
 import { faBell } from '@fortawesome/free-solid-svg-icons';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { faStethoscope } from '@fortawesome/free-solid-svg-icons';
@@ -149,6 +149,8 @@ const avgRating = (ratings) => {
     return stars;
 }
 
+//AYjROwaHZxbK8qcwjZqYQabtysz2
+
 export const CustomerHome = ({navigation}) => {
     return (
         <SafeAreaView style={styles.areaView}>
@@ -189,7 +191,13 @@ export const CustomerHome = ({navigation}) => {
                 <Text style={styles.servicesheading}>What do you need?</Text>
                 <View style={styles.serviceRow}>
                     {
-                        Object.values(services).map(item => (
+                        Object.values(services).map((item,index) => (
+                            index == 7 ? 
+                            <TouchableOpacity style={styles.service}onPress={() => navigation.navigate('Services')}>
+                                <FontAwesomeIcon icon={item.serviceIcon} size={38}style={{marginBottom:6}} color='white'/>
+                                <Text style={styles.serviceName}>Everything</Text>
+                            </TouchableOpacity> 
+                            :
                             <TouchableOpacity 
                             style={styles.service}
                             onPress={() => navigation.navigate('Category',{categoryName:item.serviceName})}
@@ -263,6 +271,7 @@ export const CustomerHome = ({navigation}) => {
 const styles = StyleSheet.create({
     areaView:{
         flex:1,
+        marginTop:Platform.OS === 'android' ? StatusBar.currentHeight : null
     },
     container:{
         flex:1,

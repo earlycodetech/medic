@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { View, Text, StyleSheet,SafeAreaView,Image,TouchableOpacity, ScrollView, Dimensions } from 'react-native';
-import { TextInput,Button } from 'react-native-paper';
+import { View, Text, StyleSheet,SafeAreaView,Image,TouchableOpacity, Dimensions, Platform, StatusBar } from 'react-native';
+import { Button } from 'react-native-paper';
 import { Theme } from '../components/Theme';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faAngleDown, faAngleUp, faLocationDot, faNoteSticky,faWallet } from '@fortawesome/free-solid-svg-icons';
+import { faLocationDot, faNoteSticky,faWallet } from '@fortawesome/free-solid-svg-icons';
 import MapView,{PROVIDER_GOOGLE} from 'react-native-maps';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { googleMapsAPIKey } from '../../services/secret/googlemapsapi.key';
@@ -19,8 +19,10 @@ const INITIAL_POSITION = {
   longitudeDelta: LONGITUDE_DELTA
 }
 
-export function Service () {
+export function Service ({navigation,route}) {
     const [tap,setTap] = useState(false);
+
+    const {serviceUID} = route.params;
 
     return (
         <SafeAreaView style={styles.areaView}>
@@ -29,7 +31,6 @@ export function Service () {
                 style={styles.map}
                 provider={PROVIDER_GOOGLE}
                 initialRegion={INITIAL_POSITION}
-                
                 />
 
                 <View style={styles.serviceHeaders}>
@@ -110,7 +111,8 @@ export function Service () {
 
 const styles = StyleSheet.create({
     areaView:{
-        flex:1
+        flex:1,
+        marginTop:Platform.OS === 'android' ? StatusBar.currentHeight : null
     },
     locationView:{
         flex:3
@@ -149,7 +151,7 @@ const styles = StyleSheet.create({
         flex:1
     },
     title:{
-        fontSize:Theme.fonts.fontSize.h5,
+        fontSize:Theme.fonts.fontSizePoint.h5,
         color:Theme.colors.brand.brandDark,
         fontWeight:'bold'
     },

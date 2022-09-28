@@ -76,7 +76,6 @@ export function Category({navigation,route}){
                 </Card.Actions>
             </Card>
         )
-       
     }
 
     return (
