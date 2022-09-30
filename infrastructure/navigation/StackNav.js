@@ -22,7 +22,7 @@ export function StackNavigation () {
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="Home" component={Home} options={{headerShown:false}} />
             <Stack.Screen name="Profile" component={Profile} options={{headerShown:true}} />
-            <Stack.Screen name="History" component={History} options={{headerShown:true}} />
+            <Stack.Screen name="History" component={History} options={{headerShown:false}} />
             <Stack.Screen name="Services" component={Services} options={{headerShown:true}} />
             <Stack.Screen name="Service" component={Service} options={{headerShown:true}} />
             <Stack.Screen name="AddService" component={AddService} options={{headerShown:false}} />
