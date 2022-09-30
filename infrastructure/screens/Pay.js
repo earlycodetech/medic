@@ -1,6 +1,7 @@
 import { View,Alert } from 'react-native';
 import WebView from 'react-native-webview';
 import { Paystack } from 'react-native-paystack-webview';
+import { paystackpubkey } from '../../services/secret/paystackpubkey.key';
 
 export function Pay ({navigation}) {
     const amountValue = 50;
@@ -8,7 +9,7 @@ export function Pay ({navigation}) {
     return (
         <View style={{ flex: 1 }}>
         <Paystack  
-            paystackKey=""
+            paystackKey={paystackpubkey}
             amount={amountValue}
             billingEmail="info@earlycode.net"
             activityIndicatorColor="green"

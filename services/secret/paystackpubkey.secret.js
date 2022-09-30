@@ -1,1 +1,0 @@
-export const paystackpubkey = 'pk_live_733a0b9225944b7b842360a0aac6b4bcc725d6bf';
