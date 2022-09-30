@@ -72,6 +72,7 @@ export function Category({navigation,route}){
                     mode='contained' 
                     color={Theme.colors.ui.nursePurple}
                     contentStyle={{paddingHorizontal:8}}
+                    onPress={() => navigation.navigate('Service',{serviceUID:service.docId})}
                     >Order</Button>
                 </Card.Actions>
             </Card>

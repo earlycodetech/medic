@@ -16,12 +16,13 @@ const Stack = createNativeStackNavigator();
 
 export function StackNavigation () {
     return(
-        <Stack.Navigator initialRouteName="Intro" >
-            <Stack.Screen name="Home" component={Home} options={{headerShown:false}} />
+        <Stack.Navigator initialRouteName="History" >
             <Stack.Screen name="Intro" component={Intro} options={{headerShown:false}} />
             <Stack.Screen name="Signup" component={Signup} options={{headerShown:false}} />
-            <Stack.Screen name="Profile" component={Profile} options={{headerShown:true}} />
             <Stack.Screen name="Login" component={Login} />
+            <Stack.Screen name="Home" component={Home} options={{headerShown:false}} />
+            <Stack.Screen name="Profile" component={Profile} options={{headerShown:true}} />
+            <Stack.Screen name="History" component={History} options={{headerShown:true}} />
             <Stack.Screen name="Services" component={Services} options={{headerShown:true}} />
             <Stack.Screen name="Service" component={Service} options={{headerShown:true}} />
             <Stack.Screen name="AddService" component={AddService} options={{headerShown:false}} />

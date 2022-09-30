@@ -22,6 +22,9 @@ export function Login({navigation}){
         })
     }
 
+    //global scope
+    //useContext
+
     return (
         <SafeAreaView style={styles.areaView}>
             <View style={styles.container}>

@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { View, Text, StyleSheet,SafeAreaView,Image,TouchableOpacity, Dimensions, Platform, StatusBar } from 'react-native';
+import { useState,useEffect } from 'react';
+import { View, Text, StyleSheet,SafeAreaView,Image,TouchableOpacity, Dimensions, Platform, StatusBar,ScrollView } from 'react-native';
 import { Button } from 'react-native-paper';
 import { Theme } from '../components/Theme';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
@@ -7,6 +7,8 @@ import { faLocationDot, faNoteSticky,faWallet } from '@fortawesome/free-solid-sv
 import MapView,{PROVIDER_GOOGLE} from 'react-native-maps';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { googleMapsAPIKey } from '../../services/secret/googlemapsapi.key';
+import { db } from '../../services/firebase';
+import { onSnapshot,doc } from 'firebase/firestore';
 
 const {width,height} = Dimensions.get('window');
 const ASPECT_RATIO = width/height;
@@ -21,11 +23,20 @@ const INITIAL_POSITION = {
 
 export function Service ({navigation,route}) {
     const [tap,setTap] = useState(false);
+    const [service,setService] = useState([]); //hold service data from firestore
+    const {serviceUID} = route.params; //setup from services.js and categories.js
 
-    const {serviceUID} = route.params;
+    useEffect(() => {
+        onSnapshot(doc(db, "services", serviceUID), (doc) => {
+            setService(doc.data());
+        })
+      },[]);
+
+    console.log(service);
 
     return (
         <SafeAreaView style={styles.areaView}>
+           
             <View style={styles.locationView}>
                 <MapView
                 style={styles.map}
@@ -35,14 +46,14 @@ export function Service ({navigation,route}) {
 
                 <View style={styles.serviceHeaders}>
                     <Image 
-                    source={require('../../assets/images/services/diagnosis-service.jpg')} 
+                    source={{uri:service.imageUrl}} 
                     style={styles.serviceImg}
                     />
                     <View style={styles.headersInfo}>
-                        <Text style={styles.title}>Diagnosis for Need of Bone Calcium</Text>
+                        <Text style={styles.title}>{service.title}</Text>
                         <View style={styles.subHeadersInfo}>
                             <TouchableOpacity>
-                                <Text style={styles.subHeadersText}>Diagnosis</Text>
+                                <Text style={styles.subHeadersText}>{service.category}</Text>
                             </TouchableOpacity>
                             <TouchableOpacity>
                                 <Text style={styles.subHeadersText}>Z Medicals</Text>
@@ -74,36 +85,29 @@ export function Service ({navigation,route}) {
                             size={Theme.sizes[3]} 
                             color={Theme.colors.brand.brandGreen} 
                             style={{marginRight:4}}/>
-                            <Text style={styles.priceInfo}>NGN23,500</Text>
+                            <Text style={styles.priceInfo}>NGN{service.price}</Text>
                         </View>
                     </View>
                     <Text>
-                        Z Medicals Laboratory is a state of the art laboratory in the city of Abuja, 
-                        which offers a fully automated laboratory services in various sub-specialties. 
-                        With the innovative use of new technologies.
+                        {/* description */}
+                        {service.description}
                     </Text>
                 </View>
-                <View style={styles.serviceActions}>
-                    <GooglePlacesAutocomplete
-                    placeholder='Search for your location'
-                        query={{
-                            key:googleMapsAPIKey,
-                            language:'en'
-                        }}
-                        minLength={3}
-                        enablePoweredByContainer={false}
-                        onPress={(data,details = null) => {
-                            console.log('Details are as follow',details)
-                        }}
-                        fetchDetails={true}
-                        nearbyPlacesAPI='GooglePlacesSearch'
-                    />
-
-                    <Button 
+          
+                <Button 
                     mode='contained'
                     contentStyle={{paddingVertical:Theme.sizes[2]}}
-                    >BOOK SERVICE</Button>
-                </View>
+                    onPress={() => navigation.navigate('Payment',
+                        {
+                            userUID:'',
+                            userEmail:'fallyfox@gmail.com',
+                            serviceUID:serviceUID,
+                            serviceTitle:service.title,
+                            price:service.price,
+                        }
+                    )}
+                    >BOOK SERVICE
+                </Button>
             </View>
         </SafeAreaView>
     )
@@ -203,7 +207,9 @@ const styles = StyleSheet.create({
         backgroundColor:Theme.colors.bg.secondary,
         borderWidth:1,
         borderColor:Theme.colors.bg.tertiary,
-        borderRadius:8
+        borderRadius:8,
+        zIndex:1,
+        paddingBottom:120
     },
     actionRow:{
         flexDirection:'row',
@@ -213,3 +219,20 @@ const styles = StyleSheet.create({
         fontWeight:'bold'
     }
 });
+
+{/* <View style={styles.serviceActions}>
+<GooglePlacesAutocomplete
+placeholder='Search for your location'
+    query={{
+        key:googleMapsAPIKey,
+        language:'en'
+    }}
+    minLength={3}
+    enablePoweredByContainer={false}
+    onPress={(data,details = null) => {
+        console.log('Details are as follow',details)
+    }}
+    fetchDetails={true}
+    nearbyPlacesAPI='GooglePlacesSearch'
+/>
+</View> */}
