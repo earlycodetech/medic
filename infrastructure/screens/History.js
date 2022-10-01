@@ -7,15 +7,35 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faCircleCheck,faClock } from '@fortawesome/free-regular-svg-icons';
 import { faWallet } from '@fortawesome/free-solid-svg-icons';
 import { Theme } from '../components/Theme';
+import { db } from '../../services/firebase';
+import { collection,where,query,onSnapshot } from 'firebase/firestore';
 
 export function History({navigation}){
     const [appIsReady, setAppIsReady] = useState(false);
+    const [myHistory,setMyHistory] = useState([]);
+
+    //filter collection of bookings by user's UID
+    const q = collection(db,'bookings');
+    const filter = query(q,where('by','==','rrr'));
+
+    useEffect(() => {
+        const allBookings = [];
+
+        onSnapshot(filter,(onSnap) => {
+            onSnap.forEach(item => {
+                const itemData = item.data();
+                itemData.docId = item.id;
+                allBookings.push(itemData);
+                setMyHistory(allBookings);
+            })
+        })
+    },[]);
 
     useEffect(() => {
         async function prepare() {
             try {
                 await Font.loadAsync({Questrial_400Regular});
-                await new Promise(resolve => setTimeout(resolve, 100));
+                await new Promise(resolve => setTimeout(resolve, 1000));
             } catch (e) {
                 console.warn(e);
             } finally {
@@ -35,34 +55,30 @@ export function History({navigation}){
         return null;
     }
 
-    const bookings = [
-      {
-        by:'ty',
-        serviceuid:'008',
-        title:'Run Like a Pro Without Missing a Step',
-        serviceprice:450,
-        status:'Pending',
-        timecreated:18374646466
-      },
-      {
-        by:'ty',
-        serviceuid:'009',
-        title:'Run Like an Athlete',
-        serviceprice:470,
-        status:'Pending',
-        timecreated:18374646499
-      },
-      {
-        by:'ay',
-        serviceuid:'010',
-        title:'Swim Like an Pro',
-        serviceprice:430,
-        status:'Pending',
-        timecreated:18374611499
-      },
-    ];
+    function StatusColor(status){
+        let statusColor;
+
+        if(status == 'Pending'){
+            statusColor = 'orange'
+        }else if(status == 'Completed'){
+            statusColor = 'green'
+        }else if(status == 'Cancelled'){
+            statusColor = 'red'
+        }else{
+            statusColor = ''
+        }
+
+        return statusColor;
+    }
 
     function TransHistory (transaction) {
+        //calculate number of days past
+        const now = new Date();
+        const presentTimeStamp = now.getTime();
+        const timeDiff = presentTimeStamp - transaction.timecreated;
+        const daysPast = timeDiff / 1000 / 3600 / 24;
+        const actualDaysPast = Math.floor(daysPast);
+
         return (
             <View style={styles.transaction}>
                 <View style={styles.transTitle}>
@@ -71,9 +87,11 @@ export function History({navigation}){
                         icon={faCircleCheck} 
                         size={16} 
                         color='green'/>
-                        <Text style={styles.titleText}>{transaction.title.length > 30 ? transaction.title.slice(0,30) + '...' : transaction.title}</Text>
+                        <Text style={styles.titleText}>
+                            {transaction.title.length > 30 ? transaction.title.slice(0,30) + '...' : transaction.title}
+                        </Text>
                     </View>
-                    <Text>9 days ago</Text>
+                    <Text>{actualDaysPast < 1 ? '0 day ago' : `${actualDaysPast} days ago`}</Text>
                 </View>
 
                 <View style={styles.status}>
@@ -88,7 +106,7 @@ export function History({navigation}){
                         <FontAwesomeIcon 
                         icon={faClock} 
                         size={14} 
-                        color={Theme.colors.bg.quartenary}/>
+                        color={StatusColor(transaction.status)}/>
                         <Text style={styles.statusText}>{transaction.status}</Text>
                     </View>
                 </View>
@@ -102,7 +120,7 @@ export function History({navigation}){
                 <Text style={styles.heading}>Your Order History</Text>
 
                 <FlatList 
-                data={bookings}
+                data={myHistory}
                 renderItem={({item}) => TransHistory(item)}
                 key={({item}) => item.serviceuid}
                 />

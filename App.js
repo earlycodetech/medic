@@ -1,8 +1,7 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { StackNavigation } from './infrastructure/navigation/StackNav';
 import {DefaultTheme} from '@react-navigation/native';
+import { AppProvider } from './infrastructure/Globals/Appcontext';
 
 const theme = {
   ...DefaultTheme,
@@ -13,15 +12,12 @@ const theme = {
 }
 
 export default function App() {
-
   return (
-    <NavigationContainer theme={theme}>
-      <StackNavigation />
-    </NavigationContainer>
+    <AppProvider>
+      <NavigationContainer theme={theme}>
+        <StackNavigation />
+      </NavigationContainer>
+    </AppProvider>
   );
 }
-
-const styles = StyleSheet.create({
- 
-});
 

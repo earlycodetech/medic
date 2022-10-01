@@ -1,6 +1,6 @@
 import { useState,useEffect } from 'react';
-import { View,Text,StyleSheet,SafeAreaView,ScrollView,Platform,StatusBar,FlatList,Alert } from 'react-native';
-import { Card,Title,Button } from 'react-native-paper';
+import { View,Text,StyleSheet,SafeAreaView,Platform,StatusBar,FlatList,Alert } from 'react-native';
+import { Card,Button } from 'react-native-paper';
 import { Theme } from '../components/Theme';
 import { db } from '../../services/firebase';
 import { onSnapshot, collection, getDoc, doc } from 'firebase/firestore';

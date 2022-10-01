@@ -29,8 +29,6 @@ export function Category({navigation,route}){
         })
     },[]);
 
-    console.log('Therapy only',services);
-
     useEffect(() => {
         async function prepare() {
             try {

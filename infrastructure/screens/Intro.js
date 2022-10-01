@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useContext } from 'react';
 import { View,Text,StyleSheet, SafeAreaView, Platform, StatusBar } from 'react-native';
 import * as SplashScreen from 'expo-splash-screen';
 import * as Font from 'expo-font';
@@ -8,9 +8,11 @@ import { faCross } from '@fortawesome/free-solid-svg-icons';
 import { faCircleInfo } from '@fortawesome/free-solid-svg-icons';
 import { Button } from 'react-native-paper';
 import { Theme } from '../components/Theme';
+import { AppContext } from '../Globals/Appcontext';
 
 export function Intro({navigation}){
     const [appIsReady, setAppIsReady] = useState(false);
+    const {userUID,userBioData,setUserBioData} = useContext(AppContext);
 
     useEffect(() => {
         async function prepare() {
