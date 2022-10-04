@@ -1,3 +1,4 @@
+import { useState, useContext, useEffect } from 'react';
 import { 
     View, 
     Text, 
@@ -13,7 +14,7 @@ import {
     StatusBar
 } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faBell } from '@fortawesome/free-solid-svg-icons';
+import { faSignOut } from '@fortawesome/free-solid-svg-icons';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { faStethoscope } from '@fortawesome/free-solid-svg-icons';
 import { faUserDoctor } from '@fortawesome/free-solid-svg-icons';
@@ -26,7 +27,9 @@ import { faNewspaper } from '@fortawesome/free-solid-svg-icons';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 import { faStarHalf } from '@fortawesome/free-solid-svg-icons';
 import { Theme } from '../../components/Theme';
-
+import { AppContext } from '../../Globals/Appcontext';
+import { onSnapshot,doc } from 'firebase/firestore';
+import { db } from '../../../services/firebase';
 
 // service component names
 const services = [
@@ -149,31 +152,40 @@ const avgRating = (ratings) => {
     return stars;
 }
 
-//AYjROwaHZxbK8qcwjZqYQabtysz2
-
 export const CustomerHome = ({navigation}) => {
+    const {userUID,userBioData,setUserBioData} = useContext(AppContext);
+
+    //get user's record
+    useEffect(() => {
+        onSnapshot(doc(db, "users", userUID), (doc) => {
+            const data = doc.data();
+            let userData = {email:'',firstName:data.firstName,lastName:data.lastName};
+            setUserBioData(userData);
+        })
+      },[]);
+
     return (
         <SafeAreaView style={styles.areaView}>
             <View style={styles.container}>
                 <View style={styles.header}>
                     <View style={styles.leftContent}>
-                        <Text style={styles.headerText}>Hello, Zohreh!</Text>
-                        <Text style={styles.subHeadText}>Female, 23</Text>
+                        <Text style={styles.headerText}>Hello, {userBioData.firstName}!</Text>
+                        <Text style={styles.subHeadText}>Patient</Text>
                     </View>
 
                     <View style={styles.rightContent}>
                         <FontAwesomeIcon 
-                        icon={faBell} 
+                        icon={faSignOut} 
                         size={30} 
                         color={Theme.colors.ui.nurseGray}
                         />
                     </View>
                 </View>
 
-               <View style={styles.searchContainer}>
+               {/* <View style={styles.searchContainer}>
                     <TextInput style={styles.search} placeholder='search health service' />
                     <FontAwesomeIcon style={styles.searchIcon} icon={faSearch} size={20} />
-               </View>
+               </View> */}
 
                 <ImageBackground 
                 source={require('../../../assets/images/nurse.jpg')}
@@ -279,7 +291,8 @@ const styles = StyleSheet.create({
     },
     header:{
         flexDirection:'row',
-        justifyContent:'space-between'
+        justifyContent:'space-between',
+        marginBottom:20
     },
     headerText:{
         fontSize:24,
@@ -312,7 +325,8 @@ const styles = StyleSheet.create({
         left:14
     },
     headerBg:{
-        height:200
+        height:200,
+        marginBottom:20
     },
     headerBgLayer:{
         flex:1,
@@ -352,6 +366,7 @@ const styles = StyleSheet.create({
         backgroundColor:Theme.colors.ui.nurseGreen, //new
         paddingTop:Theme.sizes[3],//new
         borderRadius:10, //new
+        marginBottom:20
     },
     service:{
         height:80,

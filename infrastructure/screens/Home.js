@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback,useContext } from 'react';
 import * as SplashScreen from 'expo-splash-screen';
 import * as Font from 'expo-font';
 import { Theme } from '../components/Theme';
@@ -8,14 +8,13 @@ import { History } from './History';
 import { Notifications } from './Notifications';
 import { CustomerHome } from './customers/CustomerHome';
 import { Ionicons } from '@expo/vector-icons';
+import { AppContext } from '../Globals/Appcontext';
 
 const Tab = createBottomTabNavigator();
 
-export function Home({route}){
+export function Home({navigation}){
     const [appIsReady, setAppIsReady] = useState(false);
-
-    //access data from a previous screen
-    const {userUID} = route.params;
+    const {signedIn} = useContext(AppContext);
 
     useEffect(() => {
         async function prepare() {
@@ -42,6 +41,7 @@ export function Home({route}){
     }
 
     return (
+        !signedIn ? navigation.navigate('Login') :
         <Tab.Navigator 
         screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {

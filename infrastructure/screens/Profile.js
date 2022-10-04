@@ -10,7 +10,6 @@ import { Theme } from '../components/Theme';
 import { faPhone } from '@fortawesome/free-solid-svg-icons';
 import { faMessage } from '@fortawesome/free-solid-svg-icons';
 import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
-import {ProviderProfile} from '../components/ProviderProfile';
 
 
 export function Profile({navigation}){

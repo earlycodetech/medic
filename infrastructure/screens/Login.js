@@ -1,13 +1,15 @@
-import { useState} from 'react';
+import { useState,useContext} from 'react';
 import { View,Text,StyleSheet,SafeAreaView,ScrollView,Platform,StatusBar,FlatList } from 'react-native';
 import { Theme } from '../components/Theme';
 import { TextInput,Button } from 'react-native-paper';
 import { authentication } from '../../services/firebase';
 import { signInWithEmailAndPassword,onAuthStateChanged } from 'firebase/auth';
+import { AppContext } from '../Globals/Appcontext';
 
 export function Login({navigation}){
     const [email,setEmail] = useState('');
     const [password,setPassword] = useState('');
+    const {setUserUID,userUID,setSignedIn} = useContext(AppContext);
 
     function LoginAuth(){
         signInWithEmailAndPassword(authentication,email,password)
@@ -15,9 +17,9 @@ export function Login({navigation}){
             const user = userCredential.user;
             
             onAuthStateChanged(authentication,(currentUser) => {
-                navigation.navigate('Home',{
-                    userUID:currentUser.uid,
-                })
+                setUserUID(currentUser.uid);
+                setSignedIn(true);
+                navigation.navigate('Home');
             })
         })
     }

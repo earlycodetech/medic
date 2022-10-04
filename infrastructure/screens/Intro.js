@@ -12,7 +12,7 @@ import { AppContext } from '../Globals/Appcontext';
 
 export function Intro({navigation}){
     const [appIsReady, setAppIsReady] = useState(false);
-    const {userUID,userBioData,setUserBioData} = useContext(AppContext);
+    const {userUID,signedIn,userBioData,setUserBioData} = useContext(AppContext);
 
     useEffect(() => {
         async function prepare() {
@@ -39,6 +39,7 @@ export function Intro({navigation}){
     }
 
     return (
+        signedIn ? navigation.navigate('Home') : 
         <SafeAreaView style={styles.areaView}>
             <View style={styles.container}>
                 <View style={styles.infoContainer}>
